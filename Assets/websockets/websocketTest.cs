@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿//this script represents the communication between view and game
+//all necessary requests and responses are added as a placeholder
+
+using UnityEngine;
 using System.Collections;
 using System;
 
@@ -28,6 +31,7 @@ public class websocketTest: MonoBehaviour {
 
 	// Use this for initialization
 	IEnumerator Start () {
+		int gameId;
 
 		//var s = "{\"g\":0,\"e\":2,\"p\":0,\"v\":{\"d\":1.323,\"x\":0,\"y\":0}}\n";
 		//Debug.Log(s);
@@ -36,24 +40,45 @@ public class websocketTest: MonoBehaviour {
 		//Debug.Log(N["v"]["d"].Value);
 		//Debug.Log(N["v"]["d"].AsFloat);
 
-		//establish connection
-		WebSocket w = new WebSocket(new Uri("ws://127.0.0.1:8080"));
+		//establish connection our websocket server is reachable under: 193.175.85.50:80
+		WebSocket w = new WebSocket(new Uri("ws://193.175.85.50:80"));
 		yield return StartCoroutine(w.Connect());
-		int i=0;
 
 		//send initial message
-		w.SendString("Hi there");
+		w.SendString("Hi there, this is Unity3D.");
 
-		//wait for replies and react accordingly
+		//send request to join a game (information about the game id is needed from sessions menu
+		gameId = 1;
+		w.SendString("{\"event\":2, \"v\":{\"game\":" + gameId + "}}");
+
+		//wait for response and react accordingly
 		while (true)
 		{
 			string reply = w.RecvString();
 
+			//response is not empty
 			if (reply != null)
 			{
 				Debug.Log ("Received: "+reply);
-				w.SendString("Hi there"+i++);
+
+				//received list of games?
+				if (reply.Contains ("games")) {
+					//display list of games in sessions menu
+
+				} else if (reply.Contains ("player-id")) {
+					//show player id
+				
+				} else if (reply.Contains ("countdown-ms")) {
+					//countdown until game starts in ms
+
+				} else if (reply.Contains ("d")) {
+					//position of the players vehicle (x,y)
+
+				} else if (reply.Contains ("win")) {
+					//game is over and player has lost or won
+				}
 			}
+			//an error occurred
 			if (w.error != null)
 			{
 				Debug.LogError ("Error: "+w.error);
