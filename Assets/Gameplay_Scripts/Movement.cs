@@ -9,8 +9,9 @@ public class Movement : NetworkBehaviour {
 	private int speed = 20;
 	public Text scoretxt;
 	private float score;
-	// Use this for initialization
+	websocketTest wst = new websocketTest();
 
+	// Use this for initialization
 	void Start () {
 		score = 0;
 		setText ();
@@ -31,10 +32,12 @@ public class Movement : NetworkBehaviour {
 		if(Input.GetKeyDown("a"))
 		{
 			transform.rotation = transform.rotation * Quaternion.Euler (1, -90, 1);
+			Debug.Log (wst.getPosition());
 			//transform.Rotate (Vector3.up*Time.deltaTime * speed);
 		}
 		if (Input.GetKeyDown ("d")) {
 			transform.rotation = transform.rotation * Quaternion.Euler (1, 90, 1);
+			Debug.Log (wst.getPosition());
 		}
 
 	}

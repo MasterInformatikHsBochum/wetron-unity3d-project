@@ -1,5 +1,13 @@
-﻿//this script represents the communication between view and game
+﻿//this script represents the communication between view and game and should be launched on startup and run all the time
 //all necessary requests and responses are added as a placeholder
+
+//procedure:
+//unity is launched with this script; a connection to the gateway is stablished
+//the user enters the session menu and requests a list of active games (available sessions)
+//the user selects a game and clicks join; the join game request is send
+//after all players have joined the countdown reply is received. The countdown is displayed for the user.
+//the game starts; the position of the players are received and the users position is send
+//the backend checks for collisons and sends a win/loose reply which is displayed
 
 using UnityEngine;
 using System.Collections;
@@ -27,13 +35,19 @@ using SimpleJSON;
 //	6			change direction	client		server			{"d":0.0}
 //	7			position			server		clients			{"p":0,"d":0.0,"x":0,"y":0}
 
-public class websocketTest: MonoBehaviour {
+public class websocketCommunicationScript: MonoBehaviour {
+
+	//needed variables
 	private String request;
 	private int gameId;
+	private int[] games;
 	private String position = null;
 	private int playerId;
 	private int countdown;
 	private Boolean status;
+
+	//our websocket server is reachable under: 193.175.85.50:80
+	WebSocket w = new WebSocket(new Uri("ws://193.175.85.50:80"));
 
 	// Use this for initialization
 	IEnumerator Start () {		
@@ -45,20 +59,10 @@ public class websocketTest: MonoBehaviour {
 		//Debug.Log(N["v"]["d"].Value);
 		//Debug.Log(N["v"]["d"].AsFloat);
 
-		//establish connection; our websocket server is reachable under: 193.175.85.50:80
-		WebSocket w = new WebSocket(new Uri("ws://193.175.85.50:80"));
+		//establish connection
 		yield return StartCoroutine(w.Connect());
 		Debug.Log ("Connection established.");
 
-		//send initial message
-		//w.SendString("Hi there, this is Unity3D.");
-		//Debug.Log ("Welcome message sent.");
-
-		//send request to join a game (information about the game id is needed from sessions menu)
-		gameId = 1;
-		request = "{\"event\":2, \"v\":{\"game\":" + gameId + "}}";
-		w.SendString(request);
-		Debug.Log ("Game request send:  " + request);
 
 		//wait for response and react accordingly
 		while (true)
@@ -73,6 +77,7 @@ public class websocketTest: MonoBehaviour {
 				//received list of games?
 				if (reply.Contains ("games")) {
 					//display list of games in sessions menu
+					setGames(reply);
 
 				} else if (reply.Contains ("player-id")) {
 					//show player id
@@ -102,6 +107,24 @@ public class websocketTest: MonoBehaviour {
 		w.Close();
 	}
 
+	public void sendPosition() {
+		request = "";
+		w.SendString(request);
+		Debug.Log ("Position send:  " + request);
+	}
+
+	public void getListOfGames() {
+
+	}
+
+	//send request to join a game (information about the game id is needed from sessions menu)
+	public void joinGame(int gameId) {
+		request = "{\"event\":2, \"v\":{\"game\":" + gameId + "}}";
+		w.SendString(request);
+		Debug.Log ("Join Game request send:  " + request);
+	}
+
+	//Getter/Setter
 	public void setPosition(String message){
 		this.position = message;
 	}
@@ -140,5 +163,9 @@ public class websocketTest: MonoBehaviour {
 
 	public Boolean getStatus(){
 		return this.status;
+	}
+
+	public void setGames(String message){
+
 	}
 }
