@@ -79,19 +79,19 @@ public class websocketCommunicationScript: MonoBehaviour {
 					//display list of games in sessions menu
 					setGames(reply);
 
-				} else if (reply.Contains ("player-id")) {
-					//show player id
+				} else if (reply.Contains ("\"e\":4")) {
+					//Spiel beitreten Response
 					setPlayerId(reply);
 
-				} else if (reply.Contains ("countdown-ms")) {
+				} else if (reply.Contains ("\"e\":5")) {
 					//countdown until game starts in ms
 					setCountdown(reply);
 
-				} else if (reply.Contains ("d")) {
-					//position of the players vehicle (x,y)
+				} else if (reply.Contains ("\"e\":6")) {
+					//Richtung wird mitgeteilt
 					setPosition(reply);
 
-				} else if (reply.Contains ("win")) {
+				} else if (reply.Contains ("\"e\":7")) {
 					//game is over and player has lost or won
 					setStatus(reply);
 				}
@@ -117,9 +117,15 @@ public class websocketCommunicationScript: MonoBehaviour {
 
 	}
 
+	public void collisionDetected(int gameId) {
+		request = "{\"g\":" + gameId + ", \"e\":14, \"v\":{} }";
+		w.SendString(request);
+		Debug.Log ("Collision Detected request send:  " + request);
+	}
+
 	//send request to join a game (information about the game id is needed from sessions menu)
 	public void joinGame(int gameId) {
-		request = "{\"event\":2, \"v\":{\"game\":" + gameId + "}}";
+		request = "{\"g\":" + gameId + ", \"e\":3, \"v\":{} }";
 		w.SendString(request);
 		Debug.Log ("Join Game request send:  " + request);
 	}
