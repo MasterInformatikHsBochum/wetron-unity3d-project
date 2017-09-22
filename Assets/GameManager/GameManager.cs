@@ -14,6 +14,8 @@ using System.Collections;
 using System;
 
 using SimpleJSON;
+using System.Threading;
+using UnityEngine.UI;
 
 //protocol overview:
 //{"g":0,"e":0,"p":0,"t":"c","v":{}}
@@ -35,22 +37,23 @@ using SimpleJSON;
 //	6			change direction	client		server			{"d":0.0}
 //	7			position			server		clients			{"p":0,"d":0.0,"x":0,"y":0}
 
-public class websocketCommunicationScript: MonoBehaviour {
+public class GameManager: MonoBehaviour {
+
 
 	//needed variables
 	private String request;
-	private int gameId;
+	private int gameId = -1;
 	private int[] games;
 	private String position = null;
-	private int playerId;
-	private int countdown;
+	private int playerId = -1;
+	private int countdown = -1;
 	private Boolean status;
 
 	//our websocket server is reachable under: 193.175.85.50:80
 	WebSocket w = new WebSocket(new Uri("ws://193.175.85.50:80"));
 
-	// Use this for initialization
-	IEnumerator Start () {		
+    // Use this for initialization
+    IEnumerator Start () {		
 
 		//var s = "{\"g\":0,\"e\":2,\"p\":0,\"v\":{\"d\":1.323,\"x\":0,\"y\":0}}\n";
 		//Debug.Log(s);
@@ -62,52 +65,48 @@ public class websocketCommunicationScript: MonoBehaviour {
 		//establish connection
 		yield return StartCoroutine(w.Connect());
 		Debug.Log ("Connection established.");
-
-
-		//wait for response and react accordingly
-		while (true)
-		{
-			string reply = w.RecvString();
-
-			//response is not empty
-			if (reply != null)
-			{
-				Debug.Log ("Received: "+reply);
-
-				//received list of games?
-				if (reply.Contains ("games")) {
-					//display list of games in sessions menu
-					setGames(reply);
-
-				} else if (reply.Contains ("\"e\":4")) {
-					//Spiel beitreten Response
-					setPlayerId(reply);
-
-				} else if (reply.Contains ("\"e\":5")) {
-					//countdown until game starts in ms
-					setCountdown(reply);
-
-				} else if (reply.Contains ("\"e\":6")) {
-					//Richtung wird mitgeteilt
-					setPosition(reply);
-
-				} else if (reply.Contains ("\"e\":7")) {
-					//game is over and player has lost or won
-					setStatus(reply);
-				}
-			}
-			//an error occurred
-			if (w.error != null)
-			{
-				Debug.LogError ("Error: "+w.error);
-				break;
-			}
-			yield return 0;
-		}
-		w.Close();
 	}
 
-	public void sendPosition() {
+    private void Update()
+    {
+        String receive = w.RecvString();
+        if (receive != null)
+        {
+            Debug.Log("Received Message: " + receive);
+            JSONNode receivedJSONNode = JSONNode.Parse(receive);
+            gameId = receivedJSONNode["g"].AsInt;
+            playerId = receivedJSONNode["p"].AsInt;
+            int eventtype = receivedJSONNode["e"].AsInt;
+            switch(eventtype)
+            {
+                
+                case 1:
+                    status = receivedJSONNode["v"]["success"].AsBool;
+                    if(status)
+                    {
+                        GameObject go = GameObject.Find("StatusText");
+                        go.GetComponent<Text>().text = "In Game";
+                        Debug.Log("In Game");
+                    }
+                    break;
+                case 4:
+                    countdown = receivedJSONNode["v"]["countdown-ms"].AsInt;
+                    break;
+                case 9:
+
+                    break;
+                default:break;
+            }
+        }
+    }
+
+    void OnApplicationQuit()
+    {
+        w.Close();
+        Debug.Log("Application ending after " + Time.time + " seconds");
+    }
+
+    public void sendPosition() {
 		request = "";
 		w.SendString(request);
 		Debug.Log ("Position send:  " + request);
@@ -125,7 +124,7 @@ public class websocketCommunicationScript: MonoBehaviour {
 
 	//send request to join a game (information about the game id is needed from sessions menu)
 	public void joinGame(int gameId) {
-		request = "{\"g\":" + gameId + ", \"e\":3, \"v\":{} }";
+		request = "{\"g\":" + gameId + ",\"t\":\"v\", \"e\":0, \"v\":{} }";
 		w.SendString(request);
 		Debug.Log ("Join Game request send:  " + request);
 	}

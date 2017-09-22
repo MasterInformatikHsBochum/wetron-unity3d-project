@@ -4,16 +4,28 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class LoadSessionsScript : MonoBehaviour {
-    [SerializeField] GameObject buttonPrefab;
+    public GameObject buttonPrefab;
     [SerializeField] Transform sessionsPanel;
+    private int GAMES_COUNT = 1;
 
     // Use this for initialization
     void Start () {
-		for(int i = 0; i < 4;i++)
+        GameObject canvas = gameObject;
+        GameManager gm = canvas.GetComponent<GameManager>();
+      
+		for(int i = 1; i <= GAMES_COUNT;i++)
         {
-            GameObject sessionButton = (GameObject)Instantiate(buttonPrefab);
-            sessionButton.GetComponentInChildren<Text>().text = "Yay Game";
+            GameObject sessionButton = Instantiate(buttonPrefab) as GameObject;
+            sessionButton.GetComponentInChildren<Text>().text = "Gameserver " + i;
+            int gameId = 1;
+            sessionButton.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                gm.joinGame(gameId);
+
+            });
+
             sessionButton.transform.parent = sessionsPanel;
+            
         }
 	}
 	
