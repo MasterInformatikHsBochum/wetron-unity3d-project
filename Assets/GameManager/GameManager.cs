@@ -48,9 +48,12 @@ public class GameManager: MonoBehaviour {
 	private int playerId = -1;
 	private int countdown = -1;
 	private Boolean status;
+    private Boolean win;
+    public GameObject statusText;
+    public GameObject sessionsMenuPanel;
 
 	//our websocket server is reachable under: 193.175.85.50:80
-	WebSocket w = new WebSocket(new Uri("ws://193.175.85.50:80"));
+	WebSocket w = new WebSocket(new Uri("ws://5.45.108.170:8000"));
 
     // Use this for initialization
     IEnumerator Start () {		
@@ -84,13 +87,25 @@ public class GameManager: MonoBehaviour {
                     status = receivedJSONNode["v"]["success"].AsBool;
                     if(status)
                     {
-                        GameObject go = GameObject.Find("StatusText");
-                        go.GetComponent<Text>().text = "In Game";
+                    sessionsMenuPanel.SetActive(false);
+                        statusText.GetComponent<Text>().text = "In Game";
                         Debug.Log("In Game");
                     }
                     break;
                 case 4:
-                    countdown = receivedJSONNode["v"]["countdown-ms"].AsInt;
+                    countdown = receivedJSONNode["v"]["countdown-ms"].AsInt / 1000;
+                    statusText.GetComponent<Text>().text = countdown.ToString();
+                    break;
+                case 5:
+                    win = receivedJSONNode["v"]["win"].AsBool;
+                    if (win)
+                    {
+                        statusText.GetComponent<Text>().text = "You Win!";
+                    }
+                    else
+                    {
+                        statusText.GetComponent<Text>().text = "You Lose!";
+                    }
                     break;
                 case 9:
 
