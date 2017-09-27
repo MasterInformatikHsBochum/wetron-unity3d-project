@@ -16,6 +16,7 @@ using System;
 using SimpleJSON;
 using System.Threading;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 //protocol overview:
 //{"g":0,"e":0,"p":0,"t":"c","v":{}}
@@ -51,6 +52,8 @@ public class GameManager: MonoBehaviour {
     private Boolean win;
     public GameObject statusText;
     public GameObject sessionsMenuPanel;
+    public GameObject playerModel;
+    private Dictionary<int, GameObject> players= new Dictionary<int, GameObject>();
 
 	//our websocket server is reachable under: 193.175.85.50:80
 	WebSocket w = new WebSocket(new Uri("ws://5.45.108.170:8000"));
@@ -87,9 +90,16 @@ public class GameManager: MonoBehaviour {
                     status = receivedJSONNode["v"]["success"].AsBool;
                     if(status)
                     {
-                    sessionsMenuPanel.SetActive(false);
+                        sessionsMenuPanel.SetActive(false);
                         statusText.GetComponent<Text>().text = "In Game";
                         Debug.Log("In Game");
+                        JSONArray newPlayers = receivedJSONNode["v"]["o"].AsArray;
+                        foreach (JSONNode newPlayer in newPlayers)
+                        {
+                            GameObject newPlayerModel = GameObject.Instantiate(playerModel);
+                            players.Add(newPlayer.AsInt,playerModel);
+                        }
+                        
                     }
                     break;
                 case 4:
@@ -107,11 +117,30 @@ public class GameManager: MonoBehaviour {
                         statusText.GetComponent<Text>().text = "You Lose!";
                     }
                     break;
+                case 7:
+                     JSONArray playerList = receivedJSONNode["v"].AsArray;
+                   foreach(JSONNode player in playerList)
+                    {
+                        int p = receivedJSONNode["p"].AsInt;
+                        int x = receivedJSONNode["x"].AsInt;
+                        int y = receivedJSONNode["y"].AsInt;
+                        int d = receivedJSONNode["d"].AsInt;
+                        movePlayer(p, x, y, d);
+                    }
+                    break;
                 case 9:
-
+                    
                     break;
                 default:break;
             }
+        }
+    }
+
+    private void movePlayer(int playerId, int x, int y, int direction)
+    {
+        if (players.ContainsKey(playerId))
+        {
+            GameObject movedPlayer = players[playerId];
         }
     }
 

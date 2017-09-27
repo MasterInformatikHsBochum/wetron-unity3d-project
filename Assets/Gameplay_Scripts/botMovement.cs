@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class botMovement : MonoBehaviour {
 	private int speed = 15;
-	private float time = 10;
+	private float time = 5;
 	// Use this for initialization
 	void Start () {
 		
@@ -18,7 +18,7 @@ public class botMovement : MonoBehaviour {
 
 		if (time < 0) {
 			transform.rotation = transform.rotation * Quaternion.Euler (1, 90, 1);
-			time = 10;
+			time = 5;
 		}
 	}
 }
