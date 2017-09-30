@@ -55,6 +55,7 @@ public class GameManager: MonoBehaviour {
     public GameObject sessionsMenuPanel;
     public GameObject playerModel;
     public GameObject enemiesModel;
+    public Image QRPanel;
     private Dictionary<int, GameObject> players= new Dictionary<int, GameObject>();
 
 	//our websocket server is reachable under: 193.175.85.50:80
@@ -70,6 +71,8 @@ public class GameManager: MonoBehaviour {
 		//Debug.Log(N["v"]["d"].Value);
 		//Debug.Log(N["v"]["d"].AsFloat);
 
+
+        QRPanel.enabled = false;
 		//establish connection
 		yield return StartCoroutine(w.Connect());
 		Debug.Log ("Connection established.");
@@ -97,7 +100,9 @@ public class GameManager: MonoBehaviour {
                     if(status)
                     {
                         sessionsMenuPanel.SetActive(false);
-                        statusText.GetComponent<Text>().text = "Waiting for Opponents";
+                        statusText.GetComponent<Text>().text = "Connect \n Controller";
+                        QRPanel.enabled = true;
+                        StartCoroutine(loadQrCode());                        
                         Debug.Log("In Game");
                         JSONArray newPlayers = receivedJSONNode["v"]["o"].AsArray;
                         foreach (JSONNode newPlayer in newPlayers)
@@ -114,6 +119,7 @@ public class GameManager: MonoBehaviour {
                     break;
                 case 4:
                     countdown = receivedJSONNode["v"]["countdown-ms"].AsInt / 1000;
+                    QRPanel.enabled = false;
                     if(countdown != 0)
                     {
                     statusText.GetComponent<Text>().text = countdown.ToString();
@@ -242,15 +248,17 @@ public class GameManager: MonoBehaviour {
 
 	//call with startcoroutine
 	public IEnumerator loadQrCode(){
-		//Texture2D texture = profileImage.canvasRenderer.GetMaterial().mainTexture as Texture2D;
+		Texture2D texture = QRPanel.mainTexture as Texture2D;
 
-		string url = "https://chart.googleapis.com/chart?cht=qr&chs=500x500&chl={%22gameId%22:" + gameId + " ,%22playerId%22:"+ playerId +"}";
+		string url = "https://chart.googleapis.com/chart?cht=qr&chs=500x500&chl={\"gameId\":" + gameId + ",\"playerId\":"+ playerId +"}";
+        Debug.Log(url);
 		WWW www = new WWW (url);
 		yield return www;
 
 
-		//www.LoadImageIntoTexture(texture);
+		www.LoadImageIntoTexture(texture);
 		www.Dispose ();
 		www = null;
+        QRPanel.enabled = true;
 	}
 }
