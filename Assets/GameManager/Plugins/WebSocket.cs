@@ -32,9 +32,11 @@ public class WebSocket
 		if (retval == null)
 			return null;
 		return Encoding.UTF8.GetString (retval);
+   
 	}
 
 #if UNITY_WEBGL && !UNITY_EDITOR
+     
 	[DllImport("__Internal")]
 	private static extern int SocketCreate (string url);
 
@@ -76,7 +78,7 @@ public class WebSocket
 	public IEnumerator Connect()
 	{
 		m_NativeRef = SocketCreate (mUrl.ToString());
-
+       Debug.Log("WebGL");
 		while (SocketState(m_NativeRef) == 0)
 			yield return 0;
 	}
@@ -100,7 +102,7 @@ public class WebSocket
 		}
 	}
 #else
-	WebSocketSharp.WebSocket m_Socket;
+    WebSocketSharp.WebSocket m_Socket;
 	Queue<byte[]> m_Messages = new Queue<byte[]>();
 	bool m_IsConnected = false;
 	string m_Error = null;

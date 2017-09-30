@@ -49,17 +49,27 @@ public class GameManager: MonoBehaviour {
 	private int playerId = -1;
 	private int countdown = -1;
     private int factor = 5;
+    private Boolean useKeyboard;
 	private Boolean status;
     private Boolean win;
     public GameObject statusText;
     public GameObject sessionsMenuPanel;
+    [SerializeField] Transform sessionsListPanel;
     public GameObject playerModel;
     public GameObject enemiesModel;
     public Image QRPanel;
     private Dictionary<int, GameObject> players= new Dictionary<int, GameObject>();
+    public GameObject controllerButton;
 
-	//our websocket server is reachable under: 193.175.85.50:80
-	WebSocket w = new WebSocket(new Uri("wss://wetron.tk:443/websocket/"));
+    private int GAMES_COUNT = 1;
+    public GameObject buttonPrefab;
+
+    private int areaW;
+    private int areaH;
+
+
+    //our websocket server is reachable under: 193.175.85.50:80
+    WebSocket w = new WebSocket(new Uri("wss://wetron.tk:443/websocket/"));
 
     // Use this for initialization
     IEnumerator Start () {		
@@ -76,7 +86,29 @@ public class GameManager: MonoBehaviour {
 		//establish connection
 		yield return StartCoroutine(w.Connect());
 		Debug.Log ("Connection established.");
-	}
+
+        for (int i = 1; i <= GAMES_COUNT; i++)
+        {
+            GameObject sessionButton = Instantiate(buttonPrefab) as GameObject;
+            sessionButton.GetComponentInChildren<Text>().text = "Gameserver " + i;
+            int gameId = 1;
+            sessionButton.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                joinGame(gameId);
+
+            });
+
+            sessionButton.transform.parent = sessionsListPanel;
+
+        }
+            
+        // button for Controller
+        controllerButton.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            connectController();
+        });
+
+    }
 
     private void Update()
     {
@@ -102,6 +134,7 @@ public class GameManager: MonoBehaviour {
                         sessionsMenuPanel.SetActive(false);
                         statusText.GetComponent<Text>().text = "Connect \n Controller";
                         QRPanel.enabled = true;
+                        controllerButton.SetActive(true);
                         StartCoroutine(loadQrCode());                        
                         Debug.Log("In Game");
                         JSONArray newPlayers = receivedJSONNode["v"]["o"].AsArray;
@@ -114,12 +147,15 @@ public class GameManager: MonoBehaviour {
                             players.Add(newPlayerId,newPlayerModel);
                             }
                         }
-                        
+                        areaW = receivedJSONNode["v"]["success"]["w"].AsInt;
+                        areaH = receivedJSONNode["v"]["success"]["h"].AsInt;
+                        setBounds(areaW,areaH);
                     }
                     break;
                 case 4:
                     countdown = receivedJSONNode["v"]["countdown-ms"].AsInt / 1000;
                     QRPanel.enabled = false;
+                    controllerButton.SetActive(false);
                     if(countdown != 0)
                     {
                     statusText.GetComponent<Text>().text = countdown.ToString();
@@ -150,11 +186,37 @@ public class GameManager: MonoBehaviour {
                         movePlayer(p, x, y, d);
                     }
                     break;
+                case 8:
+                    useKeyboard = receivedJSONNode["v"]["success"].AsBool;
+                    break;
                 case 9:
                     
                     break;
                 default:break;
             }
+        }
+        if(useKeyboard)
+        {
+            parseKeyboardInputs();
+        }
+    }
+
+    private void setBounds(int areaW, int areaH)
+    {
+        // TODO
+    }
+
+    private void parseKeyboardInputs()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            request = "{\"g\":" + gameId + ",\"p\":" + playerId + "\"t\":\"c\",\"e\":6,\"v\":{\"d\":360}}";
+            w.SendString(request);
+        }
+        else if (Input.GetKeyDown(KeyCode.D))
+        {
+            request = "{\"g\":" + gameId + ",\"p\":" + playerId + "\"t\":\"c\",\"e\":6,\"v\":{\"d\":90}}";
+            w.SendString(request);
         }
     }
 
@@ -189,17 +251,24 @@ public class GameManager: MonoBehaviour {
 	}
 
 	public void collisionDetected(int gameId) {
-		request = "{\"g\":" + gameId + ", \"e\":14, \"v\":{} }";
+		request = "{\"g\":" + gameId + ",\"e\":14,\"v\":{} }";
 		w.SendString(request);
 		Debug.Log ("Collision Detected request send:  " + request);
 	}
 
 	//send request to join a game (information about the game id is needed from sessions menu)
 	public void joinGame(int gameId) {
-		request = "{\"g\":" + gameId + ",\"t\":\"v\", \"e\":0, \"v\":{} }";
+		request = "{\"g\":" + gameId + ",\"t\":\"v\",\"e\":0,\"v\":{} }";
 		w.SendString(request);
 		Debug.Log ("Join Game request send:  " + request);
 	}
+
+    private void connectController()
+    {
+        request = "{\"g\":" + gameId + ",\"p\":"+playerId+",\"t\":\"c\",\"e\":0,\"v\":null}";
+        w.SendString(request);
+        Debug.Log("Join Controller request send:  " + request);
+    }
 
 	//Getter/Setter
 	public void setPosition(String message){
