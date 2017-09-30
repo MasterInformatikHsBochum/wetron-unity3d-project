@@ -217,4 +217,19 @@ public class GameManager: MonoBehaviour {
 	public void setGames(String message){
 
 	}
+
+	//call with startcoroutine
+	public void loadQrCode(){
+		//Texture2D texture = profileImage.canvasRenderer.GetMaterial().mainTexture as Texture2D;
+
+
+		string baseUrl = "https://chart.googleapis.com/chart?cht=qr&chs=500x500&chl={%22gameId%22:{0},%22playerId%22:{1}}";
+		string HelpURLAttribute = string.format (baseUrl, gameId, playerId);
+		WWW www = new WWW(url);
+		yield return www;
+
+
+		//www.LoadImageIntoTexture(texture);
+		www.Dispose();
+		www = null;
 }
