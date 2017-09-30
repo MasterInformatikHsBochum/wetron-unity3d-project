@@ -48,15 +48,17 @@ public class GameManager: MonoBehaviour {
 	private String position = null;
 	private int playerId = -1;
 	private int countdown = -1;
+    private int factor = 5;
 	private Boolean status;
     private Boolean win;
     public GameObject statusText;
     public GameObject sessionsMenuPanel;
     public GameObject playerModel;
+    public GameObject enemiesModel;
     private Dictionary<int, GameObject> players= new Dictionary<int, GameObject>();
 
 	//our websocket server is reachable under: 193.175.85.50:80
-	WebSocket w = new WebSocket(new Uri("ws://5.45.108.170:8000"));
+	WebSocket w = new WebSocket(new Uri("wss://wetron.tk:443/websocket/"));
 
     // Use this for initialization
     IEnumerator Start () {		
@@ -82,6 +84,10 @@ public class GameManager: MonoBehaviour {
             JSONNode receivedJSONNode = JSONNode.Parse(receive);
             gameId = receivedJSONNode["g"].AsInt;
             playerId = receivedJSONNode["p"].AsInt;
+            if (!players.ContainsKey(playerId))
+            {
+                players.Add(playerId, playerModel);
+            }
             int eventtype = receivedJSONNode["e"].AsInt;
             switch(eventtype)
             {
@@ -91,20 +97,30 @@ public class GameManager: MonoBehaviour {
                     if(status)
                     {
                         sessionsMenuPanel.SetActive(false);
-                        statusText.GetComponent<Text>().text = "In Game";
+                        statusText.GetComponent<Text>().text = "Waiting for Opponents";
                         Debug.Log("In Game");
                         JSONArray newPlayers = receivedJSONNode["v"]["o"].AsArray;
                         foreach (JSONNode newPlayer in newPlayers)
                         {
-                            GameObject newPlayerModel = GameObject.Instantiate(playerModel);
-                            players.Add(newPlayer.AsInt,playerModel);
+                            GameObject newPlayerModel = GameObject.Instantiate(enemiesModel);
+                            int newPlayerId = newPlayer.AsInt;
+                            if(!players.ContainsKey(newPlayerId))
+                            {
+                            players.Add(newPlayerId,newPlayerModel);
+                            }
                         }
                         
                     }
                     break;
                 case 4:
                     countdown = receivedJSONNode["v"]["countdown-ms"].AsInt / 1000;
+                    if(countdown != 0)
+                    {
                     statusText.GetComponent<Text>().text = countdown.ToString();
+                    } else
+                    {
+                        statusText.GetComponent<Text>().text = "";
+                    }
                     break;
                 case 5:
                     win = receivedJSONNode["v"]["win"].AsBool;
@@ -121,10 +137,10 @@ public class GameManager: MonoBehaviour {
                      JSONArray playerList = receivedJSONNode["v"].AsArray;
                    foreach(JSONNode player in playerList)
                     {
-                        int p = receivedJSONNode["p"].AsInt;
-                        int x = receivedJSONNode["x"].AsInt;
-                        int y = receivedJSONNode["y"].AsInt;
-                        int d = receivedJSONNode["d"].AsInt;
+                        int p = player["p"].AsInt;
+                        int x = player["x"].AsInt;
+                        int y = player["y"].AsInt;
+                        int d = player["d"].AsInt;
                         movePlayer(p, x, y, d);
                     }
                     break;
@@ -136,11 +152,17 @@ public class GameManager: MonoBehaviour {
         }
     }
 
-    private void movePlayer(int playerId, int x, int y, int direction)
+    private void movePlayer(int playerId, int x, int z, int direction)
     {
         if (players.ContainsKey(playerId))
         {
             GameObject movedPlayer = players[playerId];
+            if(!movedPlayer.activeSelf)
+            {
+                movedPlayer.SetActive(true);
+            }
+            movedPlayer.transform.position = new Vector3(x*factor, -1.4f, z*factor);
+            movedPlayer.transform.eulerAngles = new Vector3(1, direction, 1);
         }
     }
 
