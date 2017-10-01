@@ -239,12 +239,7 @@ public class GameManager: MonoBehaviour {
         w.Close();
         Debug.Log("Application ending after " + Time.time + " seconds");
     }
-
-    public void sendPosition() {
-		request = "";
-		w.SendString(request);
-		Debug.Log ("Position send:  " + request);
-	}
+    
 
 	public void getListOfGames() {
 
@@ -261,6 +256,14 @@ public class GameManager: MonoBehaviour {
 		request = "{\"g\":" + gameId + ",\"t\":\"v\",\"e\":0,\"v\":{} }";
 		w.SendString(request);
 		Debug.Log ("Join Game request send:  " + request);
+        this.gameId = gameId;
+        
+        /*    //test
+            playerId = 1;
+            connectController();
+            playerId = 2;
+            connectController(); 
+        */
 	}
 
     private void connectController()
