@@ -64,8 +64,8 @@ public class GameManager: MonoBehaviour {
     private int GAMES_COUNT = 1;
     public GameObject buttonPrefab;
 
-    private int areaW;
-    private int areaH;
+    private int areaW = 100;
+    private int areaH = 100;
 
 
     //our websocket server is reachable under: 193.175.85.50:80
