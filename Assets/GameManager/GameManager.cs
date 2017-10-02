@@ -57,6 +57,7 @@ public class GameManager: MonoBehaviour {
 
     public GameObject refreshButton;
     public GameObject createButton;
+    public GameObject maxPlayerDropDown;
     public GameObject returnButton;
     public GameObject statusText;
     public GameObject sessionsMenuPanel;
@@ -71,7 +72,6 @@ public class GameManager: MonoBehaviour {
     public Image QRPanel;
     public GameObject controllerButton;
 
-    private int GAMES_COUNT = 1;
     public GameObject buttonPrefab;
 
     private int areaW = 100;
@@ -106,7 +106,13 @@ public class GameManager: MonoBehaviour {
         {
             StartCoroutine(loadGameList());
         });
-
+        
+        // createButton
+        createButton.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            int playersChoosen = (maxPlayerDropDown.GetComponent<Dropdown>().value + 1) *2;
+            StartCoroutine(createGame(playersChoosen));
+        });
 
         // button for Controller
         controllerButton.GetComponent<Button>().onClick.AddListener(() =>
@@ -174,10 +180,39 @@ public class GameManager: MonoBehaviour {
         www = null;
     }
 
+    private IEnumerator createGame(int maxPlayers)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("maxPlayers", maxPlayers);
+        UnityWebRequest www = UnityWebRequest.Post(url + "games/",form);
+       // www.SetRequestHeader("Content-Type", "application/json");
+        www.uploadHandler.contentType = "application/json";
+        yield return www.Send();
+
+        if (www.isError)
+        {
+            Debug.Log("Error loading GameInfo:" + www.error);
+        }
+        else
+        {
+            Debug.Log("http: " + www.responseCode);
+            string data = www.downloadHandler.text;
+            JSONNode gameInfo = JSONNode.Parse(data);
+            int gameId = gameInfo["id"].AsInt;
+            if (gameId > 0)
+            {
+            joinGame(gameId);
+            }
+        }
+        www.Dispose();
+        www = null;
+    }
+
     private void addGameserver(int gameId, int maxPlayers, int activePlayers)
     {
         GameObject sessionButton = Instantiate(buttonPrefab) as GameObject;
         sessionButton.GetComponentInChildren<Text>().text = "Game " + gameId + " (" + activePlayers + "/" + maxPlayers + ")";
+        sessionButton.GetComponent<Button>().enabled = (maxPlayers != activePlayers);
         int addedGameID = gameId;
         sessionButton.GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -185,7 +220,7 @@ public class GameManager: MonoBehaviour {
 
         });
 
-        sessionButton.transform.parent = sessionsListPanel;
+        sessionButton.transform.SetParent(sessionsListPanel);
     }
 
     private void Update()
