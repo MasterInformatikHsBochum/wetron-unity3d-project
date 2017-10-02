@@ -89,25 +89,30 @@ public class GameManager: MonoBehaviour {
 
         for (int i = 1; i <= GAMES_COUNT; i++)
         {
-            GameObject sessionButton = Instantiate(buttonPrefab) as GameObject;
-            sessionButton.GetComponentInChildren<Text>().text = "Gameserver " + i;
-            int gameId = 1;
-            sessionButton.GetComponent<Button>().onClick.AddListener(() =>
-            {
-                joinGame(gameId);
-
-            });
-
-            sessionButton.transform.parent = sessionsListPanel;
+            addGameserver(i);
 
         }
-            
+
         // button for Controller
         controllerButton.GetComponent<Button>().onClick.AddListener(() =>
         {
             connectController();
         });
 
+    }
+
+    private void addGameserver(int i)
+    {
+        GameObject sessionButton = Instantiate(buttonPrefab) as GameObject;
+        sessionButton.GetComponentInChildren<Text>().text = "Gameserver " + i;
+        int addedGameID = 1;
+        sessionButton.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            joinGame(addedGameID);
+
+        });
+
+        sessionButton.transform.parent = sessionsListPanel;
     }
 
     private void Update()
