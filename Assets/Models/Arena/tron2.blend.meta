@@ -1,0 +1,201 @@
+fileFormatVersion: 2
+guid: bf68078d970f77649af4a487ab13820a
+timeCreated: 1506873629
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: 1-jet
+    100002: 1-jet_001
+    100004: Circle
+    100006: CurveCircle_001
+    100008: front_body
+    100010: front_lights
+    100012: handle
+    100014: mainBody
+    100016: pedals
+    100018: Plane_001
+    100020: rim1
+    100022: rim1glow
+    100024: rim2
+    100026: rim2glow
+    100028: secret
+    100030: secret_shield
+    100032: Sphere
+    100034: Sphere_001
+    100036: stripe1
+    100038: stripe2
+    100040: tireback
+    100042: tirecircle1
+    100044: tirecircle1_001
+    100046: tirefront
+    100048: //RootNode
+    400000: 1-jet
+    400002: 1-jet_001
+    400004: Circle
+    400006: CurveCircle_001
+    400008: front_body
+    400010: front_lights
+    400012: handle
+    400014: mainBody
+    400016: pedals
+    400018: Plane_001
+    400020: rim1
+    400022: rim1glow
+    400024: rim2
+    400026: rim2glow
+    400028: secret
+    400030: secret_shield
+    400032: Sphere
+    400034: Sphere_001
+    400036: stripe1
+    400038: stripe2
+    400040: tireback
+    400042: tirecircle1
+    400044: tirecircle1_001
+    400046: tirefront
+    400048: //RootNode
+    2300000: 1-jet
+    2300002: 1-jet_001
+    2300004: Circle
+    2300006: CurveCircle_001
+    2300008: front_body
+    2300010: front_lights
+    2300012: handle
+    2300014: mainBody
+    2300016: pedals
+    2300018: Plane_001
+    2300020: rim1
+    2300022: rim1glow
+    2300024: rim2
+    2300026: rim2glow
+    2300028: secret
+    2300030: secret_shield
+    2300032: Sphere
+    2300034: Sphere_001
+    2300036: stripe1
+    2300038: stripe2
+    2300040: tireback
+    2300042: tirecircle1
+    2300044: tirecircle1_001
+    2300046: tirefront
+    3300000: 1-jet
+    3300002: 1-jet_001
+    3300004: Circle
+    3300006: CurveCircle_001
+    3300008: front_body
+    3300010: front_lights
+    3300012: handle
+    3300014: mainBody
+    3300016: pedals
+    3300018: Plane_001
+    3300020: rim1
+    3300022: rim1glow
+    3300024: rim2
+    3300026: rim2glow
+    3300028: secret
+    3300030: secret_shield
+    3300032: Sphere
+    3300034: Sphere_001
+    3300036: stripe1
+    3300038: stripe2
+    3300040: tireback
+    3300042: tirecircle1
+    3300044: tirecircle1_001
+    3300046: tirefront
+    4300000: 1-jet_001
+    4300002: 1-jet
+    4300004: front_lights
+    4300006: stripe1
+    4300008: stripe2
+    4300010: rim1glow
+    4300012: rim2glow
+    4300014: Circle
+    4300016: secret_shield
+    4300018: secret
+    4300020: Sphere_001
+    4300022: Sphere
+    4300024: pedals
+    4300026: handle
+    4300028: tirecircle1_001
+    4300030: tireback
+    4300032: tirecircle1
+    4300034: CurveCircle_001
+    4300036: Plane_001
+    4300038: mainBody
+    4300040: rim2
+    4300042: tirefront
+    4300044: front_body
+    4300046: rim1
+    7400000: Default Take
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
