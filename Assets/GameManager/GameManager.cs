@@ -267,6 +267,7 @@ public class GameManager: MonoBehaviour {
                         statusText.GetComponent<Text>().text = "Connect \n Controller";
                         QRPanel.enabled = true;
                         //controllerButton.SetActive(true);
+						returnButton.SetActive(true);
                         StartCoroutine(loadQrCode());                
                         JSONArray newPlayers = receivedJSONNode["v"]["o"].AsArray;
                         foreach (JSONNode newPlayer in newPlayers)
@@ -283,10 +284,11 @@ public class GameManager: MonoBehaviour {
                         setBounds(areaW,areaH);
                     }
                     break;
-                case 4:
-                    countdown = receivedJSONNode["v"]["countdown-ms"].AsInt / 1000;
-                    QRPanel.enabled = false;
-                    controllerButton.SetActive(false);
+			case 4:
+					countdown = receivedJSONNode ["v"] ["countdown-ms"].AsInt / 1000;
+					QRPanel.enabled = false;
+					//controllerButton.SetActive (false);
+					returnButton.SetActive (true);
                     if(countdown != 0)
                     {
                     statusText.GetComponent<Text>().text = countdown.ToString();
