@@ -169,12 +169,19 @@ public class GameManager: MonoBehaviour {
         {
             string data = www.downloadHandler.text;
             JSONNode gameInfo = JSONNode.Parse(data);
-            if (gameId == gameInfo["id"].AsInt)
+            try
             {
-                int maxPlayers = gameInfo["maxPlayers"].AsInt;
-                int activePlayers = gameInfo["players"].Count;
-                addGameserver(gameId, maxPlayers, activePlayers);
+                  if (gameId == gameInfo["id"].AsInt)
+                            {
+                                int maxPlayers = gameInfo["maxPlayers"].AsInt;
+                                int activePlayers = gameInfo["players"].Count;
+                                addGameserver(gameId, maxPlayers, activePlayers);
+                            }
+            } catch (Exception e)
+            {
+                Debug.Log("Couldn't load Game");
             }
+          
         }
         www.Dispose();
         www = null;
@@ -434,15 +441,18 @@ public class GameManager: MonoBehaviour {
 
 	//call with startcoroutine
 	public IEnumerator loadQrCode(){
-		Texture2D texture = QRPanel.mainTexture as Texture2D;
+		
 
 		string url = "https://chart.googleapis.com/chart?cht=qr&chs=500x500&chl={\"gameId\":" + gameId + ",\"playerId\":"+ playerId +"}";
         Debug.Log(url);
 		WWW www = new WWW (url);
 		yield return www;
+        Texture2D texture = new Texture2D(www.texture.width, www.texture.height, TextureFormat.DXT1, false);
 
-
-		www.LoadImageIntoTexture(texture);
+        www.LoadImageIntoTexture(texture);
+        Rect rec = new Rect(0, 0, texture.width, texture.height);
+        Sprite spriteToUse = Sprite.Create(texture, rec, new Vector2(0.5f, 0.5f), 100);
+        QRPanel.sprite = spriteToUse;
 		www.Dispose ();
 		www = null;
         QRPanel.enabled = true;
