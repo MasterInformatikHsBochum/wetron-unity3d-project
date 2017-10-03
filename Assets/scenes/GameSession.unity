@@ -3499,9 +3499,10 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 242176267}
   m_Father: {fileID: 1845142563}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3537,7 +3538,7 @@ MonoBehaviour:
   m_Script: {fileID: 1367256648, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Content: {fileID: 1344976054}
+  m_Content: {fileID: 242176267}
   m_Horizontal: 1
   m_Vertical: 1
   m_MovementType: 1
@@ -3727,17 +3728,17 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 242176266}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1845142563}
-  m_RootOrder: 2
+  m_Father: {fileID: 149307298}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.06976459, y: 0.0595354}
   m_AnchorMax: {x: 0.92100006, y: 0.6807677}
-  m_AnchoredPosition: {x: 0, y: -2.5}
-  m_SizeDelta: {x: 0, y: 5}
+  m_AnchoredPosition: {x: -5.262601, y: -67.01077}
+  m_SizeDelta: {x: 796.85864, y: 292.9408}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &242176269
 CanvasRenderer:
@@ -4777,12 +4778,12 @@ Prefab:
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 531.68744
+      value: 531.6875
       objectReference: {fileID: 0}
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 195.95746
+      value: 195.95753
       objectReference: {fileID: 0}
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
@@ -4832,6 +4833,21 @@ Prefab:
         type: 2}
       propertyPath: m_Text
       value: Game 1 (2/2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
+        type: 2}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
+        type: 2}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
+        type: 2}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 55c352874c0e55049b71dacede8a69d8, type: 2}
@@ -5973,7 +5989,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 2
+  m_Text: max. Players
 --- !u!222 &1079252728
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6282,11 +6298,6 @@ GameObject:
   m_PrefabParentObject: {fileID: 1228879631884708, guid: 55c352874c0e55049b71dacede8a69d8,
     type: 2}
   m_PrefabInternal: {fileID: 650733830}
---- !u!224 &1344976054 stripped
-RectTransform:
-  m_PrefabParentObject: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
-    type: 2}
-  m_PrefabInternal: {fileID: 650733830}
 --- !u!1001 &1349748866
 Prefab:
   m_ObjectHideFlags: 0
@@ -6337,7 +6348,7 @@ Prefab:
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 917.7183
+      value: 917.7184
       objectReference: {fileID: 0}
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
@@ -6950,7 +6961,6 @@ RectTransform:
   m_Children:
   - {fileID: 358657271}
   - {fileID: 2082415308}
-  - {fileID: 242176267}
   - {fileID: 149307298}
   m_Father: {fileID: 1802140698}
   m_RootOrder: 1

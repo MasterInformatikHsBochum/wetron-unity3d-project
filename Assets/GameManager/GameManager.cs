@@ -113,7 +113,7 @@ public class GameManager: MonoBehaviour {
         createButton.GetComponent<Button>().onClick.AddListener(() =>
         {
 			string maxPlayers = "";
-				maxPlayers = maxPlayerInput.GetComponentInChildren<Text>().text;
+				maxPlayers = maxPlayerInput.GetComponentInChildren<InputField>().text;
 				Debug.Log(maxPlayers);
             if(maxPlayers != null && maxPlayers != "")
             {
