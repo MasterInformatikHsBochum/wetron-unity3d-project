@@ -69,6 +69,8 @@ public class GameManager: MonoBehaviour {
     public GameObject enemiesModel;
     private Dictionary<int, GameObject> players= new Dictionary<int, GameObject>();
 
+    public GameObject ground;
+
     public Image QRPanel;
     public GameObject controllerButton;
 
@@ -237,10 +239,9 @@ public class GameManager: MonoBehaviour {
 
     private void Update()
     {
-        if (useKeyboard)
-        {
+        
             parseKeyboardInputs();
-        }
+
         String receive = w.RecvString();
         if (receive != null)
         {
@@ -276,8 +277,8 @@ public class GameManager: MonoBehaviour {
                             players.Add(newPlayerId,newPlayerModel);
                             }
                         }
-                        areaW = receivedJSONNode["v"]["grid"]["w"].AsInt;
-                        areaH = receivedJSONNode["v"]["grid"]["h"].AsInt;
+                        areaW = receivedJSONNode["v"]["grid"]["w"].AsInt * factor;
+                        areaH = receivedJSONNode["v"]["grid"]["h"].AsInt * factor;
                         setBounds(areaW,areaH);
                     }
                     break;
@@ -329,15 +330,17 @@ public class GameManager: MonoBehaviour {
 
     private void setBounds(int areaW, int areaH)
     {
-        // TODO
+        ground.transform.localScale =new Vector3(areaW, 1, areaH);
+        ground.transform.position = new Vector3(areaW / 2, -3, areaH / 2);
     }
 
     private void parseKeyboardInputs()
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            request = "{\"g\":" + gameId + ",\"p\":" + playerId + "\"t\":\"c\",\"e\":6,\"v\":{\"d\":360}}";
+            request = "{\"g\":" + gameId + ",\"p\":" + playerId + "\"t\":\"c\",\"e\":6,\"v\":{\"d\":270}}";
             w.SendString(request);
+
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
@@ -357,6 +360,7 @@ public class GameManager: MonoBehaviour {
             }
             movedPlayer.transform.position = new Vector3(x*factor, -1.4f, z*factor);
             movedPlayer.transform.eulerAngles = new Vector3(1, direction, 1);
+
         }
     }
 
