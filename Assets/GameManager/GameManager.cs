@@ -114,9 +114,9 @@ public class GameManager: MonoBehaviour {
             string data = www.downloadHandler.text;
             JSONNode gameList = JSONNode.Parse(data);
 
-            for (int i = 0; i < gameList.Count; i++)
+            for (int i = gameList.Count-1; i > -1; i--)
             {
-                StartCoroutine(loadGameInfo(gameList[i].AsInt));                
+                yield return StartCoroutine(loadGameInfo(gameList[i].AsInt));                
             }
         }
         www.Dispose();
