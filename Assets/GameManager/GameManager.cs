@@ -116,8 +116,7 @@ public class GameManager: MonoBehaviour {
 
             for (int i = 0; i < gameList.Count; i++)
             {
-                StartCoroutine(loadGameInfo(gameList[i].AsInt));
-                
+                StartCoroutine(loadGameInfo(gameList[i].AsInt));                
             }
         }
         www.Dispose();
@@ -147,7 +146,7 @@ public class GameManager: MonoBehaviour {
                             }
             } catch (Exception e)
             {
-                Debug.Log("Couldn't load Game");
+                Debug.Log("Couldn't load Game: " + e.ToString());
             }
           
         }
@@ -177,7 +176,14 @@ public class GameManager: MonoBehaviour {
             int gameId = gameInfo["id"].AsInt;
             if (gameId > 0)
             {
-            joinGame(gameId);
+                for (int i = 10; i > 0; i--)
+                {
+                    sessionsMenuPanel.SetActive(false);
+                    refreshButton.SetActive(true);
+                    statusText.GetComponent<Text>().text = "Created Game : " + gameId + "\nConnecting in " + i;
+                    yield return new WaitForSeconds(1); 
+                }               
+                joinGame(gameId);
             }
         }
         www.Dispose();
