@@ -1,59 +1,27 @@
-﻿//this script represents the communication between view and game and should be launched on startup and run all the time
-//all necessary requests and responses are added as a placeholder
-
-//procedure:
-//unity is launched with this script; a connection to the gateway is stablished
-//the user enters the session menu and requests a list of active games (available sessions)
-//the user selects a game and clicks join; the join game request is send
-//after all players have joined the countdown reply is received. The countdown is displayed for the user.
-//the game starts; the position of the players are received and the users position is send
-//the backend checks for collisons and sends a win/loose reply which is displayed
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading;
 
 using UnityEngine;
-using System.Collections;
-using System;
-
-using SimpleJSON;
-using System.Threading;
 using UnityEngine.UI;
-using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 
-//protocol overview:
-//{"g":0,"e":0,"p":0,"t":"c","v":{}}
-
-//g: gameId (int)
-//e: eventType (int)
-//p: playerId (int)
-//t: type("c" [controller], "v" [view])
-//v: value (any)
-
-//events
-//index			name				source		destination		example		comment
-//	0			connect				client		server			{"p":0}		
-//	1			disconnect			client		server			{"p":0}		
-//	2			startup				server		client			{"d":0.0,"x":0,"y":0}			
-//	3			startup ack			client		server			{"p":0,"d":0.0,"x":0,"y":0}
-//	4			game start			server		client			{"t":3000}
-// 	5			game end			server		client			{"s":0}
-//	6			change direction	client		server			{"d":0.0}
-//	7			position			server		clients			{"p":0,"d":0.0,"x":0,"y":0}
+using SimpleJSON;
 
 public class GameManager: MonoBehaviour {
 
-
-	//needed variables
+	//variables
 	private String request;
 	private int gameId = -1;
-	private int[] games;
-	private String position = null;
 	private int playerId = -1;
 	private int countdown = -1;
     private int factor = 5;
     private Boolean useKeyboard;
 	private Boolean status;
     private Boolean win;
+	private string maxPlayers = "";
 
     public GameObject refreshButton;
     public GameObject createButton;
@@ -76,29 +44,22 @@ public class GameManager: MonoBehaviour {
 
     public GameObject buttonPrefab;
 
+	//size of the map
     private int areaW = 100;
     private int areaH = 100;
 
-
-    //our websocket server is reachable under: 193.175.85.50:80
+	//websocket server
     WebSocket w = new WebSocket(new Uri("wss://wetron.tk:443/websocket/"));
     // REST URL
     private string url = "https://www.wetron.tk/api/";
 
-    // Use this for initialization
-    IEnumerator Start () {		
-
-		//var s = "{\"g\":0,\"e\":2,\"p\":0,\"v\":{\"d\":1.323,\"x\":0,\"y\":0}}\n";
-		//Debug.Log(s);
-
-		//var N = JSON.Parse(s);
-		//Debug.Log(N["v"]["d"].Value);
-		//Debug.Log(N["v"]["d"].AsFloat);
+    IEnumerator Start () {
 
         StartCoroutine(loadGameList());
 
         QRPanel.enabled = false;
-		//establish connection
+
+		//establish websocket connection
 		yield return StartCoroutine(w.Connect());
 		Debug.Log ("Connection established.");
 
@@ -112,9 +73,8 @@ public class GameManager: MonoBehaviour {
         // createButton
         createButton.GetComponent<Button>().onClick.AddListener(() =>
         {
-			string maxPlayers = "";
-				maxPlayers = maxPlayerInput.GetComponentInChildren<Text>().text;
-				Debug.Log(maxPlayers);
+			maxPlayers = maxPlayerInput.GetComponentInChildren<InputField>().text;
+
             if(maxPlayers != null && maxPlayers != "")
             {
             int playersChoosen = int.Parse(maxPlayers);
@@ -195,6 +155,7 @@ public class GameManager: MonoBehaviour {
         www = null;
     }
 
+	// create a new game
     private IEnumerator createGame(int maxPlayers)
     {
         WWWForm form = new WWWForm();
@@ -239,6 +200,7 @@ public class GameManager: MonoBehaviour {
 
     }
 
+	//MonoBehaviour function that is called every frame and reacts to incoming websocket messages
     private void Update()
     {
         
@@ -258,7 +220,7 @@ public class GameManager: MonoBehaviour {
             int eventtype = receivedJSONNode["e"].AsInt;
             switch(eventtype)
             {
-                
+                //join game
                 case 1:
                     status = receivedJSONNode["v"]["success"].AsBool;
                     if(status)
@@ -268,6 +230,7 @@ public class GameManager: MonoBehaviour {
                         statusText.GetComponent<Text>().text = "Connect \n Controller";
                         QRPanel.enabled = true;
                         //controllerButton.SetActive(true);
+						returnButton.SetActive(true);
                         StartCoroutine(loadQrCode());                
                         JSONArray newPlayers = receivedJSONNode["v"]["o"].AsArray;
                         foreach (JSONNode newPlayer in newPlayers)
@@ -284,10 +247,12 @@ public class GameManager: MonoBehaviour {
                         setBounds(areaW,areaH);
                     }
                     break;
-                case 4:
-                    countdown = receivedJSONNode["v"]["countdown-ms"].AsInt / 1000;
-                    QRPanel.enabled = false;
-                    controllerButton.SetActive(false);
+				// game starts
+				case 4:
+					countdown = receivedJSONNode ["v"] ["countdown-ms"].AsInt / 1000;
+					QRPanel.enabled = false;
+					//controllerButton.SetActive (false);
+					returnButton.SetActive (true);
                     if(countdown != 0)
                     {
                     statusText.GetComponent<Text>().text = countdown.ToString();
@@ -296,7 +261,8 @@ public class GameManager: MonoBehaviour {
                         statusText.GetComponent<Text>().text = "";
                     }
                     break;
-                case 5:
+				// game over
+            	case 5:
                     win = receivedJSONNode["v"]["win"].AsBool;
                     if (win)
                     {
@@ -308,6 +274,7 @@ public class GameManager: MonoBehaviour {
                     }
                     returnButton.SetActive(true);
                     break;
+				// direction / position information
                 case 7:
                      JSONArray playerList = receivedJSONNode["v"].AsArray;
                    foreach(JSONNode player in playerList)
@@ -330,6 +297,7 @@ public class GameManager: MonoBehaviour {
         }
     }
 
+	//restrict boundaries of the grid
     private void setBounds(int areaW, int areaH)
     {
         ground.transform.localScale =new Vector3(areaW, 1, areaH);
@@ -373,11 +341,6 @@ public class GameManager: MonoBehaviour {
         w.Close();
         Debug.Log("Application ending after " + Time.time + " seconds");
     }
-    
-
-	public void getListOfGames() {
-
-	}
 
 	public void collisionDetected(int gameId) {
 		request = "{\"g\":" + gameId + ",\"e\":14,\"v\":{} }";
@@ -391,13 +354,6 @@ public class GameManager: MonoBehaviour {
 		w.SendString(request);
 		Debug.Log ("Join Game request send:  " + request);
         this.gameId = gameId;
-        
-        /*    //test
-            playerId = 1;
-            connectController();
-            playerId = 2;
-            connectController(); 
-        */
 	}
 
     private void connectController()
@@ -407,54 +363,8 @@ public class GameManager: MonoBehaviour {
         Debug.Log("Join Controller request send:  " + request);
     }
 
-	//Getter/Setter
-	public void setPosition(String message){
-		this.position = message;
-	}
-
-	public String getPosition(){
-		return this.position;
-	}
-
-	public void setPlayerId(String message){
-		//this.playerId = message;
-	}
-
-	public int getPlayerId(){
-		return this.playerId;
-	}
-
-	public void setGameId(String message){
-		//this.gameId = message;
-	}
-
-	public int getGameId(){
-		return this.gameId;
-	}
-
-	public void setCountdown(String message){
-		//this.countdown = message;
-	}
-
-	public int getCountdown(){
-		return this.countdown;
-	}
-
-	public void setStatus(String message){
-		//this.status = message;
-	}
-
-	public Boolean getStatus(){
-		return this.status;
-	}
-
-	public void setGames(String message){
-
-	}
-
 	//call with startcoroutine
 	public IEnumerator loadQrCode(){
-		
 
 		string url = "https://chart.googleapis.com/chart?cht=qr&chs=500x500&chl={\"gameId\":" + gameId + ",\"playerId\":"+ playerId +"}";
         Debug.Log(url);
