@@ -5642,7 +5642,7 @@ Prefab:
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 118.39694
+      value: 118.69974
       objectReference: {fileID: 0}
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
@@ -5652,7 +5652,7 @@ Prefab:
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 236.7939
+      value: 237.39948
       objectReference: {fileID: 0}
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
@@ -5884,7 +5884,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: max. Players
+  m_Text: 2
 --- !u!222 &1079252728
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6243,7 +6243,7 @@ Prefab:
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 917.72327
+      value: 917.42035
       objectReference: {fileID: 0}
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
@@ -6253,7 +6253,7 @@ Prefab:
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 236.7939
+      value: 237.39948
       objectReference: {fileID: 0}
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
@@ -6815,7 +6815,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   refreshButton: {fileID: 497098692}
   createButton: {fileID: 285065610}
-  maxPlayerInput: {fileID: 0}
+  maxPlayerInput: {fileID: 471870613}
   returnButton: {fileID: 1344061706}
   statusText: {fileID: 194117984}
   sessionsMenuPanel: {fileID: 1845142562}
