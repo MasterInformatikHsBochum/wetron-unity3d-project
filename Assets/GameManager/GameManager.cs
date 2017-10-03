@@ -225,6 +225,10 @@ public class GameManager: MonoBehaviour {
 
     private void Update()
     {
+        if (useKeyboard)
+        {
+            parseKeyboardInputs();
+        }
         String receive = w.RecvString();
         if (receive != null)
         {
@@ -260,8 +264,8 @@ public class GameManager: MonoBehaviour {
                             players.Add(newPlayerId,newPlayerModel);
                             }
                         }
-                        areaW = receivedJSONNode["v"]["success"]["w"].AsInt;
-                        areaH = receivedJSONNode["v"]["success"]["h"].AsInt;
+                        areaW = receivedJSONNode["v"]["grid"]["w"].AsInt;
+                        areaH = receivedJSONNode["v"]["grid"]["h"].AsInt;
                         setBounds(areaW,areaH);
                     }
                     break;
@@ -308,10 +312,6 @@ public class GameManager: MonoBehaviour {
                     break;
                 default:break;
             }
-        }
-        if(useKeyboard)
-        {
-            parseKeyboardInputs();
         }
     }
 
