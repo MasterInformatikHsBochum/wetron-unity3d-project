@@ -179,7 +179,7 @@ public class GameManager: MonoBehaviour {
                 for (int i = 10; i > 0; i--)
                 {
                     sessionsMenuPanel.SetActive(false);
-                    refreshButton.SetActive(true);
+                    returnButton.SetActive(true);
                     statusText.GetComponent<Text>().text = "Created Game : " + gameId + "\nConnecting in " + i;
                     yield return new WaitForSeconds(1); 
                 }               
