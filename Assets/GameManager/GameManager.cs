@@ -110,8 +110,9 @@ public class GameManager: MonoBehaviour {
         // createButton
         createButton.GetComponent<Button>().onClick.AddListener(() =>
         {
-
-            string maxPlayers = maxPlayerInput.GetComponent<Text>().text;
+			string maxPlayers = "";
+				maxPlayers = maxPlayerInput.GetComponentInChildren<Text>().text;
+				Debug.Log(maxPlayers);
             if(maxPlayers != null && maxPlayers != "")
             {
             int playersChoosen = int.Parse(maxPlayers);
@@ -124,7 +125,7 @@ public class GameManager: MonoBehaviour {
         {
             connectController();
         });
-
+		
         // return to Menu
         returnButton.GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -264,7 +265,7 @@ public class GameManager: MonoBehaviour {
                         hudText.GetComponent<Text>().text = "Game: " + gameId + ", Player:" + playerId;
                         statusText.GetComponent<Text>().text = "Connect \n Controller";
                         QRPanel.enabled = true;
-                        controllerButton.SetActive(true);
+                        //controllerButton.SetActive(true);
                         StartCoroutine(loadQrCode());                
                         JSONArray newPlayers = receivedJSONNode["v"]["o"].AsArray;
                         foreach (JSONNode newPlayer in newPlayers)
@@ -334,14 +335,16 @@ public class GameManager: MonoBehaviour {
 
     private void parseKeyboardInputs()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown("a"))
         {
-            request = "{\"g\":" + gameId + ",\"p\":" + playerId + "\"t\":\"c\",\"e\":6,\"v\":{\"d\":360}}";
+            request = "{\"g\":" + gameId + ",\"p\":" + playerId + "\"t\":\"c\",\"e\":6,\"v\":{\"d\":270}}";
+			Debug.Log ("Turn left" + request);
             w.SendString(request);
         }
-        else if (Input.GetKeyDown(KeyCode.D))
+		else if (Input.GetKeyDown("d"))
         {
             request = "{\"g\":" + gameId + ",\"p\":" + playerId + "\"t\":\"c\",\"e\":6,\"v\":{\"d\":90}}";
+			Debug.Log ("Turn right" + request);
             w.SendString(request);
         }
     }
