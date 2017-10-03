@@ -57,7 +57,7 @@ public class GameManager: MonoBehaviour {
 
     public GameObject refreshButton;
     public GameObject createButton;
-    public GameObject maxPlayerDropDown;
+    public GameObject maxPlayerInput;
     public GameObject returnButton;
     public GameObject statusText;
     public GameObject sessionsMenuPanel;
@@ -106,12 +106,17 @@ public class GameManager: MonoBehaviour {
         {
             StartCoroutine(loadGameList());
         });
-        
+
         // createButton
         createButton.GetComponent<Button>().onClick.AddListener(() =>
         {
-            int playersChoosen = (maxPlayerDropDown.GetComponent<Dropdown>().value + 1) *2;
+
+            string maxPlayers = maxPlayerInput.GetComponent<Text>().text;
+            if(maxPlayers != null && maxPlayers != "")
+            {
+            int playersChoosen = int.Parse(maxPlayers);
             StartCoroutine(createGame(playersChoosen));
+            }
         });
 
         // button for Controller
