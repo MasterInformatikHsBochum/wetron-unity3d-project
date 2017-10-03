@@ -361,7 +361,7 @@ public class GameManager: MonoBehaviour {
             {
                 movedPlayer.SetActive(true);
             }
-            movedPlayer.transform.position = new Vector3(x*factor, -1.4f, z*factor);
+            movedPlayer.transform.position = new Vector3(x*factor, -1, z*factor);
             movedPlayer.transform.eulerAngles = new Vector3(1, direction, 1);
 
         }

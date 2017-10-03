@@ -4175,7 +4175,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 465397461}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 64.99158, y: 0, z: -71.71251}
+  m_LocalPosition: {x: 1, y: -1.08, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 315328204}
@@ -4354,7 +4354,7 @@ GameObject:
   - component: {fileID: 496316802}
   - component: {fileID: 496316801}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5642,7 +5642,7 @@ Prefab:
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 118.69974
+      value: 118.39695
       objectReference: {fileID: 0}
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
@@ -5652,7 +5652,7 @@ Prefab:
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 237.39948
+      value: 236.7939
       objectReference: {fileID: 0}
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
@@ -6243,7 +6243,7 @@ Prefab:
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 917.42035
+      value: 917.72314
       objectReference: {fileID: 0}
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
@@ -6253,7 +6253,7 @@ Prefab:
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 237.39948
+      value: 236.7939
       objectReference: {fileID: 0}
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
@@ -6823,6 +6823,7 @@ MonoBehaviour:
   hudText: {fileID: 1709331012}
   playerModel: {fileID: 465397461}
   enemiesModel: {fileID: 2101434677}
+  ground: {fileID: 496316800}
   QRPanel: {fileID: 1698238945}
   controllerButton: {fileID: 44888206}
   buttonPrefab: {fileID: 1344976050}
