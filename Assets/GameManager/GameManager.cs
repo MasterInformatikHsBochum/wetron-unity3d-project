@@ -235,7 +235,8 @@ public class GameManager: MonoBehaviour {
 
         });
 
-        sessionButton.transform.SetParent(sessionsListPanel);
+        sessionButton.transform.SetParent(sessionsListPanel,false);
+
     }
 
     private void Update()
@@ -319,7 +320,7 @@ public class GameManager: MonoBehaviour {
                     }
                     break;
                 case 8:
-                    useKeyboard = receivedJSONNode["v"]["success"].AsBool;
+                    //useKeyboard = receivedJSONNode["v"]["success"].AsBool;
                     break;
                 case 9:
                     
