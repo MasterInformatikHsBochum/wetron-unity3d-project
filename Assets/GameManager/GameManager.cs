@@ -336,6 +336,10 @@ public class GameManager: MonoBehaviour {
             {
                 movedPlayer.SetActive(true);
             }
+            if(!movedPlayer.GetComponent<TrailRenderer>().enabled)
+            {
+                movedPlayer.GetComponent<TrailRenderer>().enabled = true;
+            }
             movedPlayer.transform.position = new Vector3(x*factor, -1, z*factor);
             movedPlayer.transform.eulerAngles = new Vector3(1, direction, 1);
 
