@@ -5045,7 +5045,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &613637384
 MeshFilter:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 33923752603994514, guid: d1972f04b7957f447a8de32f8e880a28,
@@ -5053,9 +5052,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 613637381}
   m_Mesh: {fileID: 4300032, guid: a47b67b930cfba04cb7e4649378d8adc, type: 3}
-<<<<<<< HEAD
-=======
---- !u!1 &629331235
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 1843698401243996, guid: 58a3f6965c855af4aafd13074b0b673b,
@@ -5237,8 +5233,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 55c352874c0e55049b71dacede8a69d8, type: 2}
   m_IsPrefabParent: 0
->>>>>>> 6c521fc01a97c6f0c65c68bef986a378cd7305b2
---- !u!224 &658673821 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
     type: 2}
