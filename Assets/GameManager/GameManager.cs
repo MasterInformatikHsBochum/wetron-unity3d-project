@@ -17,6 +17,8 @@ using SimpleJSON;
 using System.Threading;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 
 //protocol overview:
 //{"g":0,"e":0,"p":0,"t":"c","v":{}}
@@ -52,24 +54,34 @@ public class GameManager: MonoBehaviour {
     private Boolean useKeyboard;
 	private Boolean status;
     private Boolean win;
+
+    public GameObject refreshButton;
+    public GameObject createButton;
+    public GameObject maxPlayerDropDown;
+    public GameObject returnButton;
     public GameObject statusText;
     public GameObject sessionsMenuPanel;
     [SerializeField] Transform sessionsListPanel;
+    public GameObject hudText;
+
+    // player objects
     public GameObject playerModel;
     public GameObject enemiesModel;
-    public Image QRPanel;
     private Dictionary<int, GameObject> players= new Dictionary<int, GameObject>();
+
+    public Image QRPanel;
     public GameObject controllerButton;
 
-    private int GAMES_COUNT = 1;
     public GameObject buttonPrefab;
 
-    private int areaW;
-    private int areaH;
+    private int areaW = 100;
+    private int areaH = 100;
 
 
     //our websocket server is reachable under: 193.175.85.50:80
     WebSocket w = new WebSocket(new Uri("wss://wetron.tk:443/websocket/"));
+    // REST URL
+    private string url = "https://www.wetron.tk/api/";
 
     // Use this for initialization
     IEnumerator Start () {		
@@ -81,37 +93,142 @@ public class GameManager: MonoBehaviour {
 		//Debug.Log(N["v"]["d"].Value);
 		//Debug.Log(N["v"]["d"].AsFloat);
 
+        StartCoroutine(loadGameList());
 
         QRPanel.enabled = false;
 		//establish connection
 		yield return StartCoroutine(w.Connect());
 		Debug.Log ("Connection established.");
 
-        for (int i = 1; i <= GAMES_COUNT; i++)
+
+        // refreshButton
+        refreshButton.GetComponent<Button>().onClick.AddListener(() =>
         {
-            GameObject sessionButton = Instantiate(buttonPrefab) as GameObject;
-            sessionButton.GetComponentInChildren<Text>().text = "Gameserver " + i;
-            int gameId = 1;
-            sessionButton.GetComponent<Button>().onClick.AddListener(() =>
-            {
-                joinGame(gameId);
+            StartCoroutine(loadGameList());
+        });
+        
+        // createButton
+        createButton.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            int playersChoosen = (maxPlayerDropDown.GetComponent<Dropdown>().value + 1) *2;
+            StartCoroutine(createGame(playersChoosen));
+        });
 
-            });
-
-            sessionButton.transform.parent = sessionsListPanel;
-
-        }
-            
         // button for Controller
         controllerButton.GetComponent<Button>().onClick.AddListener(() =>
         {
             connectController();
         });
 
+        // return to Menu
+        returnButton.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        });
+        
+    }
+
+    private IEnumerator loadGameList()
+    {
+        UnityWebRequest www = UnityWebRequest.Get(url + "games/");
+        yield return www.Send();
+
+        if(www.isError)
+        {
+            Debug.Log("Error loading GameList:" + www.GetHashCode());
+        } 
+        else
+        {
+            foreach (Transform child in sessionsListPanel)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+            string data = www.downloadHandler.text;
+            JSONNode gameList = JSONNode.Parse(data);
+
+            for (int i = 0; i < gameList.Count; i++)
+            {
+                StartCoroutine(loadGameInfo(gameList[i].AsInt));
+                
+            }
+        }
+        www.Dispose();
+        www = null;
+    }
+
+    private IEnumerator loadGameInfo(int gameId)
+    {
+        UnityWebRequest www = UnityWebRequest.Get(url + "games/" + gameId + "");
+        yield return www.Send();
+
+        if (www.isError)
+        {
+            Debug.Log("Error loading GameInfo:" + www.error);
+        }
+        else
+        {
+            string data = www.downloadHandler.text;
+            JSONNode gameInfo = JSONNode.Parse(data);
+            if (gameId == gameInfo["id"].AsInt)
+            {
+                int maxPlayers = gameInfo["maxPlayers"].AsInt;
+                int activePlayers = gameInfo["players"].Count;
+                addGameserver(gameId, maxPlayers, activePlayers);
+            }
+        }
+        www.Dispose();
+        www = null;
+    }
+
+    private IEnumerator createGame(int maxPlayers)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("maxPlayers", maxPlayers);
+        UnityWebRequest www = UnityWebRequest.Post(url + "games/",form);
+       // www.SetRequestHeader("Content-Type", "application/json");
+        www.uploadHandler.contentType = "application/json";
+        yield return www.Send();
+
+        if (www.isError)
+        {
+            Debug.Log("Error loading GameInfo:" + www.error);
+        }
+        else
+        {
+            Debug.Log("http: " + www.responseCode);
+            string data = www.downloadHandler.text;
+            JSONNode gameInfo = JSONNode.Parse(data);
+            int gameId = gameInfo["id"].AsInt;
+            if (gameId > 0)
+            {
+            joinGame(gameId);
+            }
+        }
+        www.Dispose();
+        www = null;
+    }
+
+    private void addGameserver(int gameId, int maxPlayers, int activePlayers)
+    {
+        GameObject sessionButton = Instantiate(buttonPrefab) as GameObject;
+        sessionButton.GetComponentInChildren<Text>().text = "Game " + gameId + " (" + activePlayers + "/" + maxPlayers + ")";
+        sessionButton.GetComponent<Button>().enabled = (maxPlayers != activePlayers);
+        int addedGameID = gameId;
+        sessionButton.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            joinGame(addedGameID);
+
+        });
+
+        sessionButton.transform.SetParent(sessionsListPanel);
     }
 
     private void Update()
     {
+        if (useKeyboard)
+        {
+            parseKeyboardInputs();
+        }
         String receive = w.RecvString();
         if (receive != null)
         {
@@ -132,11 +249,11 @@ public class GameManager: MonoBehaviour {
                     if(status)
                     {
                         sessionsMenuPanel.SetActive(false);
+                        hudText.GetComponent<Text>().text = "Game: " + gameId + ", Player:" + playerId;
                         statusText.GetComponent<Text>().text = "Connect \n Controller";
                         QRPanel.enabled = true;
                         controllerButton.SetActive(true);
-                        StartCoroutine(loadQrCode());                        
-                        Debug.Log("In Game");
+                        StartCoroutine(loadQrCode());                
                         JSONArray newPlayers = receivedJSONNode["v"]["o"].AsArray;
                         foreach (JSONNode newPlayer in newPlayers)
                         {
@@ -147,8 +264,8 @@ public class GameManager: MonoBehaviour {
                             players.Add(newPlayerId,newPlayerModel);
                             }
                         }
-                        areaW = receivedJSONNode["v"]["success"]["w"].AsInt;
-                        areaH = receivedJSONNode["v"]["success"]["h"].AsInt;
+                        areaW = receivedJSONNode["v"]["grid"]["w"].AsInt;
+                        areaH = receivedJSONNode["v"]["grid"]["h"].AsInt;
                         setBounds(areaW,areaH);
                     }
                     break;
@@ -174,6 +291,7 @@ public class GameManager: MonoBehaviour {
                     {
                         statusText.GetComponent<Text>().text = "You Lose!";
                     }
+                    returnButton.SetActive(true);
                     break;
                 case 7:
                      JSONArray playerList = receivedJSONNode["v"].AsArray;
@@ -194,10 +312,6 @@ public class GameManager: MonoBehaviour {
                     break;
                 default:break;
             }
-        }
-        if(useKeyboard)
-        {
-            parseKeyboardInputs();
         }
     }
 

@@ -9,11 +9,11 @@ EditorBuildSettings:
     path: Assets/scenes/GameSession.unity
     guid: 8cd116d0b2351474ea07a3c49e5d22ab
   - enabled: 0
-    path: Assets/scenes/Main_Menu.unity
+    path: 
     guid: d8596aa5e26d85949972a218529790ea
   - enabled: 0
     path: 
     guid: 3fb17cfee1a7e204d8592608cca099d0
   - enabled: 0
-    path: Assets/scenes/test_Gameplay_Scene.unity
+    path: 
     guid: 975778f18fc78ec4f95df202a69aecfd
