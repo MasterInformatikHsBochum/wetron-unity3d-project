@@ -5,7 +5,7 @@ using UnityEngine;
 public class BGM : MonoBehaviour {
 
     private bool fadeout;
-    private AudioSource bgm;
+    private AudioSource bgm; 
 
     // Use this for initialization
     void Start () {

@@ -1,0 +1,144 @@
+fileFormatVersion: 2
+guid: b12187b01ec2426418da41f9e473836b
+timeCreated: 1507146378
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Arena_Arena1
+    100002: Arena_Floor
+    100004: Arena_Lights_Cube1
+    100006: Arena_Lights_Cube2
+    100008: Arena_Lights_Cube_12
+    100010: Arena_Lights_Cube_2
+    100012: Arena_Lights_Cube_3
+    100014: Arena_Lights_Cube_4
+    100016: Arena_Objects_Box1_Atom_Array1_Cube
+    100018: Arena_Objects_Box1_Cube_11
+    100020: Arena_Objects_Box2_Atom_Array_Cube3
+    100022: Arena_Objects_Box2_Cube_1
+    100024: Arena_Sky
+    100026: //RootNode
+    400000: Arena_Arena1
+    400002: Arena_Floor
+    400004: Arena_Lights_Cube1
+    400006: Arena_Lights_Cube2
+    400008: Arena_Lights_Cube_12
+    400010: Arena_Lights_Cube_2
+    400012: Arena_Lights_Cube_3
+    400014: Arena_Lights_Cube_4
+    400016: Arena_Objects_Box1_Atom_Array1_Cube
+    400018: Arena_Objects_Box1_Cube_11
+    400020: Arena_Objects_Box2_Atom_Array_Cube3
+    400022: Arena_Objects_Box2_Cube_1
+    400024: Arena_Sky
+    400026: //RootNode
+    2300000: Arena_Arena1
+    2300002: Arena_Floor
+    2300004: Arena_Lights_Cube1
+    2300006: Arena_Lights_Cube2
+    2300008: Arena_Lights_Cube_12
+    2300010: Arena_Lights_Cube_2
+    2300012: Arena_Lights_Cube_3
+    2300014: Arena_Lights_Cube_4
+    2300016: Arena_Objects_Box1_Atom_Array1_Cube
+    2300018: Arena_Objects_Box1_Cube_11
+    2300020: Arena_Objects_Box2_Atom_Array_Cube3
+    2300022: Arena_Objects_Box2_Cube_1
+    2300024: Arena_Sky
+    3300000: Arena_Arena1
+    3300002: Arena_Floor
+    3300004: Arena_Lights_Cube1
+    3300006: Arena_Lights_Cube2
+    3300008: Arena_Lights_Cube_12
+    3300010: Arena_Lights_Cube_2
+    3300012: Arena_Lights_Cube_3
+    3300014: Arena_Lights_Cube_4
+    3300016: Arena_Objects_Box1_Atom_Array1_Cube
+    3300018: Arena_Objects_Box1_Cube_11
+    3300020: Arena_Objects_Box2_Atom_Array_Cube3
+    3300022: Arena_Objects_Box2_Cube_1
+    3300024: Arena_Sky
+    4300000: Arena_Arena1
+    4300002: Arena_Floor
+    4300004: Arena_Lights_Cube1
+    4300006: Arena_Lights_Cube2
+    4300008: Arena_Lights_Cube_12
+    4300010: Arena_Lights_Cube_2
+    4300012: Arena_Lights_Cube_3
+    4300014: Arena_Lights_Cube_4
+    4300016: Arena_Objects_Box1_Atom_Array1_Cube
+    4300018: Arena_Objects_Box1_Cube_11
+    4300020: Arena_Objects_Box2_Atom_Array_Cube3
+    4300022: Arena_Objects_Box2_Cube_1
+    4300024: Arena_Sky
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
