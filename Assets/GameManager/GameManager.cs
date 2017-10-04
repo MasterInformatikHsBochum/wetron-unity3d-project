@@ -23,6 +23,7 @@ public class GameManager: MonoBehaviour {
     private Boolean win;
 	private string maxPlayers = "";
 
+    public GameObject bgm;
     public GameObject refreshButton;
     public GameObject createButton;
     public GameObject maxPlayerInput;
@@ -54,7 +55,6 @@ public class GameManager: MonoBehaviour {
     private string url = "https://www.wetron.tk/api/";
 
     IEnumerator Start () {
-
         StartCoroutine(loadGameList());
 
         QRPanel.enabled = false;
@@ -271,7 +271,8 @@ public class GameManager: MonoBehaviour {
                     break;
 				// game starts
 				case 4:
-					countdown = receivedJSONNode ["v"] ["countdown-ms"].AsInt / 1000;
+                    ((BGM)bgm.GetComponent(typeof(BGM))).Fadeout = true;
+                    countdown = receivedJSONNode ["v"] ["countdown-ms"].AsInt / 1000;
 					QRPanel.enabled = false;
 					//controllerButton.SetActive (false);
 					returnButton.SetActive (false);
