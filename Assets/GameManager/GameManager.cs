@@ -72,14 +72,9 @@ public class GameManager: MonoBehaviour {
 
         // createButton
         createButton.GetComponent<Button>().onClick.AddListener(() =>
-        {
-			maxPlayers = maxPlayerInput.GetComponentInChildren<InputField>().text;
-
-            if(maxPlayers != null && maxPlayers != "")
-            {
+        {			
             int playersChoosen = int.Parse(maxPlayers);
             StartCoroutine(createGame(playersChoosen));
-            }
         });
 
         // button for Controller
@@ -93,11 +88,18 @@ public class GameManager: MonoBehaviour {
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         });
+
+        maxPlayerInput.GetComponent<InputField>().onValueChanged.AddListener(delegate
+        {
+           maxPlayers = maxPlayerInput.GetComponentInChildren<InputField>().text;
+           createButton.GetComponent<Button>().interactable = (maxPlayers != null && maxPlayers != "");
+        });
         
     }
 
     private IEnumerator loadGameList()
     {
+        refreshButton.GetComponent<Button>().interactable = false;
         UnityWebRequest www = UnityWebRequest.Get(url + "games/");
         yield return www.Send();
 
@@ -107,20 +109,28 @@ public class GameManager: MonoBehaviour {
         } 
         else
         {
-            foreach (Transform child in sessionsListPanel)
+            if(www.responseCode == 200)
             {
-                GameObject.Destroy(child.gameObject);
-            }
-            string data = www.downloadHandler.text;
-            JSONNode gameList = JSONNode.Parse(data);
+                foreach (Transform child in sessionsListPanel)
+                {
+                    GameObject.Destroy(child.gameObject);
+                }
+                string data = www.downloadHandler.text;
+                JSONNode gameList = JSONNode.Parse(data);
 
-            for (int i = gameList.Count-1; i > -1; i--)
+                for (int i = gameList.Count-1; i > -1; i--)
+                {
+                    yield return StartCoroutine(loadGameInfo(gameList[i].AsInt));                
+                }
+            }
+            else
             {
-                yield return StartCoroutine(loadGameInfo(gameList[i].AsInt));                
+                Debug.Log("No changes on GameList.");
             }
         }
         www.Dispose();
         www = null;
+        refreshButton.GetComponent<Button>().interactable = true;
     }
 
     private IEnumerator loadGameInfo(int gameId)
@@ -134,21 +144,27 @@ public class GameManager: MonoBehaviour {
         }
         else
         {
-            string data = www.downloadHandler.text;
-            JSONNode gameInfo = JSONNode.Parse(data);
-            try
+            if (www.responseCode == 200 || www.responseCode == 304)
             {
-                  if (gameId == gameInfo["id"].AsInt)
-                            {
-                                int maxPlayers = gameInfo["maxPlayers"].AsInt;
-                                int activePlayers = gameInfo["players"].Count;
-                                addGameserver(gameId, maxPlayers, activePlayers);
-                            }
-            } catch (Exception e)
-            {
-                Debug.Log("Couldn't load Game: " + e.ToString());
+                string data = www.downloadHandler.text;
+                JSONNode gameInfo = JSONNode.Parse(data);
+                try
+                {
+                      if (gameId == gameInfo["id"].AsInt)
+                                {
+                                    int maxPlayers = gameInfo["maxPlayers"].AsInt;
+                                    int activePlayers = gameInfo["players"].Count;
+                                    addGameserver(gameId, maxPlayers, activePlayers);
+                                }
+                } catch (Exception e)
+                {
+                    Debug.Log("Couldn't add Game: " + gameId);
+                }
             }
-          
+            else
+            {
+                Debug.Log("Couldn't find Game: " + gameId);
+            }
         }
         www.Dispose();
         www = null;
@@ -176,10 +192,10 @@ public class GameManager: MonoBehaviour {
             int gameId = gameInfo["id"].AsInt;
             if (gameId > 0)
             {
+                sessionsMenuPanel.SetActive(false);
+                returnButton.SetActive(true);
                 for (int i = 10; i > 0; i--)
                 {
-                    sessionsMenuPanel.SetActive(false);
-                    returnButton.SetActive(true);
                     statusText.GetComponent<Text>().text = "Created Game : " + gameId + "\nConnecting in " + i;
                     yield return new WaitForSeconds(1); 
                 }               
@@ -194,7 +210,7 @@ public class GameManager: MonoBehaviour {
     {
         GameObject sessionButton = Instantiate(buttonPrefab) as GameObject;
         sessionButton.GetComponentInChildren<Text>().text = "Game " + gameId + " (" + activePlayers + "/" + maxPlayers + ")";
-        sessionButton.GetComponent<Button>().enabled = (maxPlayers != activePlayers);
+        sessionButton.GetComponent<Button>().interactable = (maxPlayers != activePlayers);
         int addedGameID = gameId;
         sessionButton.GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -210,7 +226,7 @@ public class GameManager: MonoBehaviour {
     private void Update()
     {
         
-            parseKeyboardInputs();
+        // parseKeyboardInputs();
 
         String receive = w.RecvString();
         if (receive != null)
@@ -258,7 +274,7 @@ public class GameManager: MonoBehaviour {
 					countdown = receivedJSONNode ["v"] ["countdown-ms"].AsInt / 1000;
 					QRPanel.enabled = false;
 					//controllerButton.SetActive (false);
-					returnButton.SetActive (true);
+					returnButton.SetActive (false);
                     if(countdown != 0)
                     {
                     statusText.GetComponent<Text>().text = countdown.ToString();
@@ -335,6 +351,10 @@ public class GameManager: MonoBehaviour {
             if(!movedPlayer.activeSelf)
             {
                 movedPlayer.SetActive(true);
+            }
+            if(!movedPlayer.GetComponent<TrailRenderer>().enabled)
+            {
+                movedPlayer.GetComponent<TrailRenderer>().enabled = true;
             }
             movedPlayer.transform.position = new Vector3(x*factor, -1, z*factor);
             movedPlayer.transform.eulerAngles = new Vector3(1, direction, 1);
