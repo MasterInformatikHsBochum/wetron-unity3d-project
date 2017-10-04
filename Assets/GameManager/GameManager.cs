@@ -282,6 +282,10 @@ public class GameManager: MonoBehaviour {
                     } else
                     {
                         statusText.GetComponent<Text>().text = "";
+                        foreach(GameObject player in players.Values)
+                        {
+                            player.GetComponentInChildren<AudioSource>().Play();
+                        }
                     }
                     break;
 				// game over
@@ -294,6 +298,10 @@ public class GameManager: MonoBehaviour {
                     else
                     {
                         statusText.GetComponent<Text>().text = "You Lose!";
+                    }
+                    foreach (GameObject player in players.Values)
+                    {
+                        player.GetComponentInChildren<AudioSource>().Stop();
                     }
                     returnButton.SetActive(true);
                     break;
