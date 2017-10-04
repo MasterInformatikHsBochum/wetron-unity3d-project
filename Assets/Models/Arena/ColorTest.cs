@@ -4,25 +4,24 @@ using UnityEngine;
 
 public class ColorTest : MonoBehaviour {
 	public Material changeMat;
-	private Color color;
-	// Use this for initialization
+	public Color pColor;
 	void Start () {
+		pColor = Color.blue;
+
+		foreach (TrailRenderer comp in GetComponents<TrailRenderer>()) {
+		//	comp.colorGradient.SetKeys(grdKey, grdAlpha);
+			comp.startColor = pColor;
+			comp.endColor = pColor;
+		}
+
 		foreach (Renderer comp in GetComponentsInChildren<Renderer>()) {
 			//Debug.Log (comp.material.name);
 			if (comp.sharedMaterial == changeMat) {
-				Debug.Log ("true :" + comp);
-				comp.material.color = Color.blue;
+				comp.material.color = pColor;
+				//comp.material.color = new Color(1.0f, 0.982f, 0.982f, 1.0f);
 			}
 		}
-		foreach (TrailRenderer comp in GetComponents<TrailRenderer>()) {
-			Debug.Log ("comp : " + comp.ToString ());
 
-			for(int i = 0; i < comp.colorGradient.colorKeys.Length; i++ ) {
-				Debug.Log ("First color :" + comp.colorGradient.colorKeys [i].color);
-				comp.colorGradient.colorKeys[i].color = Color.blue;
-				Debug.Log ("Second color :" + comp.colorGradient.colorKeys [i].color);
-			}
-		}
 	}
 
 	// Update is called once per frame
