@@ -284,6 +284,7 @@ public class GameManager: MonoBehaviour {
                         statusText.GetComponent<Text>().text = "";
                         foreach(GameObject player in players.Values)
                         {
+                            DontDestroyOnLoad(player.GetComponent<AudioSource>());
                             player.GetComponentInChildren<AudioSource>().Play();
                         }
                     }
