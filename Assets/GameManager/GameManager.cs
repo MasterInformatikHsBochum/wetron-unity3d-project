@@ -86,6 +86,12 @@ public class GameManager: MonoBehaviour {
         // return to Menu
         returnButton.GetComponent<Button>().onClick.AddListener(() =>
         {
+            foreach(GameObject player in players.Values)
+            {
+                player.GetComponent<TrailRenderer>().enabled = false;
+                player.SetActive(false);
+            }
+            players.Clear();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         });
 
