@@ -40,6 +40,7 @@ public class GameManager: MonoBehaviour {
 
     public GameObject ground;
 
+    public ColorTest ct;
     public Image QRPanel;
     public GameObject controllerButton;
 
@@ -100,6 +101,8 @@ public class GameManager: MonoBehaviour {
            maxPlayers = maxPlayerInput.GetComponentInChildren<InputField>().text;
            createButton.GetComponent<Button>().interactable = (maxPlayers != null && maxPlayers != "");
         });
+
+        ct = ((ColorTest)GameObject.FindObjectOfType<ColorTest>());
         
     }
 
@@ -244,6 +247,7 @@ public class GameManager: MonoBehaviour {
             if (!players.ContainsKey(playerId))
             {
                 players.Add(playerId, playerModel);
+                ct.calcColorPlayer(playerModel, playerId);
             }
             int eventtype = receivedJSONNode["e"].AsInt;
             switch(eventtype)
@@ -268,6 +272,7 @@ public class GameManager: MonoBehaviour {
                             if(!players.ContainsKey(newPlayerId))
                             {
                             players.Add(newPlayerId,newPlayerModel);
+                                ct.calcColorPlayer(newPlayerModel, newPlayerId);
                             }
                         }
                         areaW = receivedJSONNode["v"]["grid"]["w"].AsInt * factor;

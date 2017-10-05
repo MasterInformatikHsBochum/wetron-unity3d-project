@@ -2355,7 +2355,7 @@ Prefab:
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 918.1912
+      value: 918.19116
       objectReference: {fileID: 0}
     - target: {fileID: 224522492500154108, guid: 55c352874c0e55049b71dacede8a69d8,
         type: 2}
@@ -2816,6 +2816,7 @@ GameObject:
   - component: {fileID: 1802140696}
   - component: {fileID: 1802140695}
   - component: {fileID: 1802140700}
+  - component: {fileID: 1802140699}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2900,6 +2901,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1802140699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1802140694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c11fb7062a84940a69de7d1391b512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  changeMat: {fileID: 2100000, guid: 0aa7f80b5484bd74c9a19d4a2ccdd12d, type: 2}
+  pColor: []
 --- !u!114 &1802140700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2923,6 +2937,7 @@ MonoBehaviour:
   playerModel: {fileID: 1100907203}
   enemiesModel: {fileID: 1790224362}
   ground: {fileID: 496316800}
+  ct: {fileID: 0}
   QRPanel: {fileID: 1698238945}
   controllerButton: {fileID: 44888206}
   buttonPrefab: {fileID: 1973205396}
@@ -3177,6 +3192,11 @@ Prefab:
         type: 2}
       propertyPath: m_Time
       value: Infinity
+      objectReference: {fileID: 0}
+    - target: {fileID: 108837720413670606, guid: acc3a8c473308ce47b5b52fea370bc92,
+        type: 2}
+      propertyPath: m_Intensity
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: acc3a8c473308ce47b5b52fea370bc92, type: 2}
