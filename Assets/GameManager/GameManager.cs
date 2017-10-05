@@ -93,6 +93,7 @@ public class GameManager: MonoBehaviour {
                 player.SetActive(false);
             }
             players.Clear();
+            w.Close();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         });
 
