@@ -86,6 +86,12 @@ public class GameManager: MonoBehaviour {
         // return to Menu
         returnButton.GetComponent<Button>().onClick.AddListener(() =>
         {
+            foreach(GameObject player in players.Values)
+            {
+                player.GetComponent<TrailRenderer>().enabled = false;
+                player.SetActive(false);
+            }
+            players.Clear();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         });
 
@@ -282,6 +288,11 @@ public class GameManager: MonoBehaviour {
                     } else
                     {
                         statusText.GetComponent<Text>().text = "";
+                        foreach(GameObject player in players.Values)
+                        {
+                            DontDestroyOnLoad(player.GetComponent<AudioSource>());
+                            player.GetComponentInChildren<AudioSource>().Play();
+                        }
                     }
                     break;
 				// game over
@@ -294,6 +305,10 @@ public class GameManager: MonoBehaviour {
                     else
                     {
                         statusText.GetComponent<Text>().text = "You Lose!";
+                    }
+                    foreach (GameObject player in players.Values)
+                    {
+                        player.GetComponentInChildren<AudioSource>().Stop();
                     }
                     returnButton.SetActive(true);
                     break;
